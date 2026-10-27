@@ -219,7 +219,7 @@ func TestDoc(t *testing.T) {
 		assert.Contains(t, output, "test_caption")
 		assert.Contains(t, output, "test_example")
 		assert.Contains(t, output, "See Also")
-		assert.Contains(t, output, "preserving-manually-added-documentation")
+		assert.Contains(t, output, "project/contributing/cli/cli.md#documenting")
 	})
 	t.Run("Test getManuallyAddedContentMap function", func(t *testing.T) {
 		_, err := getManuallyAddedContentMap("test.md")
