@@ -61,18 +61,8 @@ mesheryctl system login -p Meshery
 			return ErrGetCurrentContext(err)
 		}
 
-		currCtx, err := mctlCfg.GetCurrentContext()
-		if err != nil {
+		if _, err := mctlCfg.GetCurrentContext(); err != nil {
 			return ErrGetCurrentContext(err)
-		}
-
-		isRunning, err := utils.IsMesheryRunning(currCtx.GetPlatform())
-		if err != nil {
-			return utils.ErrMesheryCheckRunningStatus(err)
-		}
-
-		if !isRunning {
-			return utils.ErrMesheryServerNotRunning(currCtx.GetPlatform())
 		}
 
 		var tokenData []byte
@@ -92,7 +82,8 @@ mesheryctl system login -p Meshery
 				utils.Log.Error(err)
 				return err
 			}
-			return errors.Wrap(err, "authentication failed: Unable to reach Meshery Server. Verify system readiness with `mesheryctl system check`.")
+			serverURL := mctlCfg.GetBaseMesheryURL()
+			return errors.Wrapf(err, "authentication failed: Meshery Server unavailable at %s. Is your Meshery Server up and running? Verify system readiness with `mesheryctl system check`.", serverURL)
 		}
 
 		utils.Log.Info("authenticated")
